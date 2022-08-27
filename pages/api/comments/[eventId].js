@@ -29,18 +29,22 @@ async function handler(req, res) {
     console.log(result);
 
     newComment.id = result.insertedId;
-    
+
     res.status(201).json({ message: "Added comment", comment: newComment})
 
   } 
 
   if  (req.method === "GET") {
-    const dummyList = [
-      {id: "c1", name: "Max", text: "rando comment" },
-      {id: "c2", name: "Minks", text: "rando comment 1" }
-    ];
+    const db = client.db();
 
-    res.status(200).json({comments: dummyList});
+    const documents = await db
+      .collection("comments")
+      .find()
+      .sort({_id: -1})
+      .toArray();
+    // find all comments in mongodb sorted by _id in desc and returns as array
+
+    res.status(200).json({comments: documents});
   }
 
   client.close();    
