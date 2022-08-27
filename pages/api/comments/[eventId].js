@@ -39,7 +39,7 @@ async function handler(req, res) {
 
     const documents = await db
       .collection("comments")
-      .find()
+      .find({ eventId: eventId })
       .sort({_id: -1})
       .toArray();
     // find all comments in mongodb sorted by _id in desc and returns as array
